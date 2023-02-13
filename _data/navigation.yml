@@ -3,8 +3,5 @@
 - text: Home
   url: /
 - text: Map
-  url: /map
-- text: Contact
-  url: /contact
-
+  url: /map 
 
