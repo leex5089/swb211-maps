@@ -1,0 +1,10 @@
+# specify main menu items here
+
+- text: Home
+  url: /
+- text: Map
+  url: /map
+- text: Contact
+  url: /contact
+
+

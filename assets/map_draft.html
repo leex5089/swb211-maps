@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Show and hide layers</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%;height: 100%; }
+</style>
+</head>
+<body>
+<style>
+#menu {
+background: #fff;
+position: absolute;
+z-index: 1;
+top: 10px;
+right: 10px;
+border-radius: 3px;
+width: 120px;
+border: 1px solid rgba(0, 0, 0, 0.4);
+font-family: 'Open Sans', sans-serif;
+}
+ 
+#menu a {
+font-size: 13px;
+color: #404040;
+display: block;
+margin: 0;
+padding: 0;
+padding: 10px;
+text-decoration: none;
+border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+text-align: center;
+}
+ 
+#menu a:last-child {
+border: none;
+}
+ 
+#menu a:hover {
+background-color: #f8f8f8;
+color: #404040;
+}
+ 
+#menu a.active {
+background-color: #3887be;
+color: #ffffff;
+}
+ 
+#menu a.active:hover {
+background: #3074a4;
+}
+
+.quakeInfo {
+  position: absolute;
+  font-family: sans-serif;
+  margin-top: 5px;
+  margin-left: 5px;
+  padding: 5px;
+  width: 35%;
+  border: 2px solid black;
+  font-size: 18px;
+  color: #000000;
+  background-color: rgba(240, 255, 255, 0.8);
+  border-radius: 1px;
+}
+
+</style>
+ 
+<nav id="menu"></nav>
+<div id="map"></div>
+ 
+ 
+ <div class='quakeInfo'>
+ <div><strong><font size="4">Impact of increased Minnesota ECE investment by Legislative district
+</font></strong>  </div>
+          <div><strong><font size="4">House District:</strong> <span id='house_dist'></span></div>
+
+          <div><strong><font size="3.5">Female with Young Children Employment Share</strong>  </div>
+
+
+          <div><strong><font size="3">Base:</strong> <span id='em_base'></span></div>
+     <div><strong><font size="3">Narrow Policy:</strong> <span id='em_narrow'></span></div>
+  <div><strong><font size="3">Broad Policy:</strong> <span id='em_broad'></span></div>
+            <div><strong> </strong>  </div>
+
+          <div><strong><font size="3.5">ECE Expenditure (annual)</strong>  </div>
+
+            <div><strong><font size="3">Base:</strong> <span id='ex_base'></span></div>
+     <div><strong><font size="3">Narrow Policy:</strong> <span id='ex_narrow'></span></div>
+  <div><strong><font size="3">Broad Policy:</strong> <span id='ex_broad'></span></div>
+
+  <div><strong><font size="1.5">Source: 2021 ACS 5 year estimates; Policy parameters from Borowsky et al (2022).</font></strong>  </div>
+
+</div><div 
+>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1Ijoid29ubGVlIiwiYSI6ImNqYjY0bHZlczBvMnAzMm16OTlyYWFzYnYifQ.yaLx92dXVMk1NKp5Fp7HUg';
+const map = new mapboxgl.Map({
+container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/mapbox/light-v11',
+zoom: 5.7,
+center: [ -96.25751346020881, 45.94410722715156 ]
+});   
+ 
+// Wait until the map has finished loading.
+map.on('load', () => {
+// Add a custom vector tileset source. This tileset contains
+// point features representing h_expenditure-0usavk. Each feature contains
+// three properties. For example:
+// {
+//     alt_name: "Museo Arqueologico",
+//     name: "Museo Inka",
+//     tourism: "museum"
+// }
+map.addSource('h_expenditure-0usavk', {
+type: 'vector',
+url: 'mapbox://wonlee.6vtxd5qs'
+});
+map.addLayer({
+'id': 'h_expenditure-0usavk',
+'type': 'fill',
+'source': 'h_expenditure-0usavk',
+'layout': {
+// Make the layer visible by default.
+'visibility': 'visible'
+},
+'paint': {
+'fill-color':[
+'interpolate',
+['linear'],
+['get', 'base'],
+0, '#334ABC', 
+],
+"fill-opacity": 0.25  
+},
+'source-layer': 'h_expenditure-0usavk',
+});
+ 
+// Add the Mapbox Terrain v2 vector tileset. Read more about
+// the structure of data in this tileset in the documentation:
+// https://docs.mapbox.com/vector-tiles/reference/mapbox-terrain-v2/
+ 
+
+map.addSource('h_female_share_emp-3m4gpt', {
+type: 'vector',
+url: 'mapbox://wonlee.04dqlj74'
+});
+map.addLayer({
+'id': 'h_female_share_emp-3m4gpt',
+'type': 'fill',
+'source': 'h_female_share_emp-3m4gpt',
+'layout': {
+// Make the layer visible by default.
+'visibility': 'visible'
+},
+'paint': {
+'fill-color':[
+'interpolate',
+['linear'],
+['get', 'base'],
+0, '#334ABC',  
+],
+"fill-opacity": 0.25  
+},
+'source-layer': 'h_female_share_emp-3m4gpt',
+});
+ });
+
+ 
+// After the last frame rendered before the map enters an "idle" state.
+map.on('idle', () => {
+// If these two layers were not added to the map, abort
+if (!map.getLayer('h_female_share_emp-3m4gpt') || !map.getLayer('h_expenditure-0usavk')) {
+return;
+}
+ 
+// Enumerate ids of the layers.
+const toggleableLayerIds = ['h_female_share_emp-3m4gpt', 'h_expenditure-0usavk'];
+ 
+// Set up the corresponding toggle button for each layer.
+for (const id of toggleableLayerIds) {
+// Skip layers that already have a button set up.
+if (document.getElementById(id)) {
+continue;
+}
+ 
+// Create a link.
+const link = document.createElement('a');
+link.id = id;
+link.href = '#';
+link.textContent = id;
+link.className = 'active';
+ 
+// Show or hide layer when the toggle is clicked.
+link.onclick = function (e) {
+const clickedLayer = this.textContent;
+e.preventDefault();
+e.stopPropagation();
+ 
+const visibility = map.getLayoutProperty(
+clickedLayer,
+'visibility'
+);
+ 
+// Toggle layer visibility by changing the layout object's visibility property.
+if (visibility === 'visible') {
+map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+this.className = '';
+} else {
+this.className = 'active';
+map.setLayoutProperty(
+clickedLayer,
+'visibility',
+'visible'
+);
+}
+};
+ 
+const layers = document.getElementById('menu');
+layers.appendChild(link);
+}
+
+
+
+  
+
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_expenditure-0usavk']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('house_dist').innerHTML = ZCTA5CE10[0].properties.house_dist ;
+    } else {
+        document.getElemnentById('house_dist').innerHTML ='house_dist';
+    }
+});
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_expenditure-0usavk']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('ex_base').innerHTML = '$'+ZCTA5CE10[0].properties.base.toFixed(1) ;
+    } else {
+        document.getElemnentById('ex_base').innerHTML ='ex_base';
+    }
+});
+
+
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_expenditure-0usavk']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('ex_narrow').innerHTML = '$'+ZCTA5CE10[0].properties.narrow.toFixed(1) ;
+    } else {
+        document.getElemnentById('ex_narrow').innerHTML ='ex_narrow';
+    }
+});
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_expenditure-0usavk']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('ex_broad').innerHTML = '$'+ZCTA5CE10[0].properties.broad.toFixed(1) ;
+    } else {
+        document.getElemnentById('ex_broad').innerHTML ='ex_broad';
+    }
+});
+ 
+
+
+
+ 
+
+ 
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_female_share_emp-3m4gpt']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('house_dist').innerHTML = ZCTA5CE10[0].properties.house_dist ;
+    } else {
+        document.getElemnentById('house_dist').innerHTML ='house_dist';
+    }
+});
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_female_share_emp-3m4gpt']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('em_base').innerHTML = ZCTA5CE10[0].properties.base.toFixed(3) ;
+    } else {
+        document.getElemnentById('em_base').innerHTML ='em_base';
+    }
+});
+
+
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_female_share_emp-3m4gpt']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('em_narrow').innerHTML = ZCTA5CE10[0].properties.narrow.toFixed(3) ;
+    } else {
+        document.getElemnentById('em_narrow').innerHTML ='em_narrow';
+    }
+});
+
+
+map.on('mousemove',function(e){
+    var ZCTA5CE10=map.queryRenderedFeatures(e.point, {
+        layers: ['h_female_share_emp-3m4gpt']
+    });
+    if (ZCTA5CE10.length >0) {
+        document.getElementById('em_broad').innerHTML = ZCTA5CE10[0].properties.broad.toFixed(3) ;
+    } else {
+        document.getElemnentById('em_broad').innerHTML ='em_broad';
+    }
+});
+ 
+
+
+
+
+
+
+
+
+});
+</script>
+ 
+</body>
+</html>
