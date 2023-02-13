@@ -36,10 +36,22 @@ height: 10px;
 margin-right: 5px;
 width: 10px;
 }
+.quake-info { 
+    font-family: sans-serif;  
+    border: 2px solid black;
+    font-size: 14px;
+    color: #23272a;
+    background-color: #5a918a; 
+
+  }
 </style>
  
 <div id="map"></div>
- 
+<div class="quake-info">
+  <div><strong>Magnitude:</strong>&nbsp;<span id="mag"></span></div>
+  <div><strong>Location:</strong>&nbsp;<span id="loc"></span></div>
+  <div><strong>Date:</strong>&nbsp;<span id="date"></span></div>
+</div> 
 <div id="zip-legend" class="legend">
 <h4>GreatJobsKC 6 Counties: Zipcode Boundary</h4>
 </div>
@@ -53,24 +65,7 @@ width: 10px;
 <h4>GreatJobsKC 6 Counties: Block-group Boundary</h4>
 </div>
 
- 
-<div id="b-legend" class="legend">
-<h4>GreatJobsKC 6 Counties: Block Boundary</h4>
-<h4>Population Count</h4>
-<h4>Source: Census 2020</h4>
 
-<div><span style="background-color: #808080"></span>0</div>
-<div><span style="background-color: #0c06ac"></span>1-4</div>
-<div><span style="background-color: #7339bd"></span>5-8</div>
-<div><span style="background-color: #ab6cd0"></span>9-14</div>
-<div><span style="background-color: #d9a1e6"></span>15-25</div>
-<div><span style="background-color: #ffafdd"></span>26-50</div>
-<div><span style="background-color: #ff80ab"></span>51-100</div>
-<div><span style="background-color: #f8516c"></span>101-200</div> 
-<div><span style="background-color: #f14d5a"></span>201-500</div> 
-<div><span style="background-color: #de2323"></span>501-2600</div> 
-
-</div>
  
  <div id="b-legend2" class="legend">
 <h4>GreatJobsKC 6 Counties: Block Boundary</h4>
@@ -94,14 +89,13 @@ container: 'map',
 // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
 style: 'mapbox://styles/mapbox/light-v11',
 center: [-94.581124,39.115775],
-minZoom: 7.7,
-zoom: 7.8
-}); 
- 
-const zoomThreshold = 7.9;
-const zoomThreshold2 = 8.5;
-const zoomThreshold3 = 9.5;
-const zoomThreshold4 = 10.5;
+minZoom: 7,
+zoom: 7
+});  
+const zoomThreshold = 8;
+const zoomThreshold2 = 9;
+const zoomThreshold3 = 10;
+const zoomThreshold4 = 15;
 
 map.on('load', () => {
 // Add a custom vector tileset source. The tileset used in
@@ -133,21 +127,11 @@ map.addSource('bg_KC_6county-2puesu', {
 'type': 'vector',
 'url': 'mapbox://wonlee.8ojjnc87'
 }); 
-map.addSource('b_KC_6county_with_population-135w2v', {
-'type': 'vector',
-'url': 'mapbox://wonlee.90hsrn4q'
-}); 
 map.addSource('b_KC_6county_with_population2-0il812', {
 'type': 'vector',
 'url': 'mapbox://wonlee.48iz4s9g'
-}); 
-
-
-
-
-
-
-
+});
+ 
 
 map.addLayer(
 {
@@ -210,58 +194,13 @@ map.addLayer(
 'road-label-simple' // Add layer below labels
 );
 
-
-map.addLayer(
-{
-'id': 'b_KC_6county_with_population-135w2v',
-'source': 'b_KC_6county_with_population-135w2v',
-'source-layer': 'b_KC_6county_with_population-135w2v',
-'minzoom': zoomThreshold3,
-'maxzoom': zoomThreshold4,
-
-'type': 'fill',
-// only include features for which the "isCounty"
-// property is "true" 
-'paint': {
-'fill-outline-color': 'black',
-
-'fill-color': [
-'interpolate',
-['linear'],
-['get', 'b_populati'],
-0,
-'#808080',
-4,
-'#0c06ac',
-8,
-'#7339bd',
-14,
-'#ab6cd0',
-25,
-'#d9a1e6',
-50,
-'#ffafdd',
-100,
-'#ff80ab',
-200,
-'#f8516c',
-500,
-'#f14d5a',
-2600,
-'#de2323'  
-],
-'fill-opacity': 0.8
-}
-},
-'road-label-simple' // Add layer below labels
-);
-
 map.addLayer(
 {
 'id': 'b_KC_6county_with_population2-0il812',
 'source': 'b_KC_6county_with_population2-0il812',
 'source-layer': 'b_KC_6county_with_population2-0il812',
-'minzoom': zoomThreshold4,
+'minzoom': zoomThreshold3,
+'maxzoom': zoomThreshold4,
 'type': 'fill',
 // only include features for which the "isCounty"
 // property is "true" 
@@ -301,7 +240,6 @@ map.addLayer(
 const zipLegendEl = document.getElementById('zip-legend');
 const ctLegendEl = document.getElementById('ct-legend');
 const bgLegendEl = document.getElementById('bg-legend');
-const blockLegendEl = document.getElementById('b-legend');
 const blockLegendEl2 = document.getElementById('b-legend2');
 
 map.on('zoom', () => {
@@ -310,7 +248,6 @@ if (map.getZoom() < zoomThreshold) {
 ctLegendEl.style.display = 'none';
 zipLegendEl.style.display = 'block';
 bgLegendEl.style.display = 'none';
-blockLegendEl.style.display = 'none';
 blockLegendEl2.style.display = 'none';
 
 } 
@@ -319,7 +256,6 @@ else if (map.getZoom() >= zoomThreshold  && map.getZoom() < zoomThreshold2){
 ctLegendEl.style.display = 'block';
 zipLegendEl.style.display = 'none';
 bgLegendEl.style.display = 'none';
-blockLegendEl.style.display = 'none';
 blockLegendEl2.style.display = 'none';
 
 }
@@ -327,23 +263,14 @@ else if (map.getZoom() >= zoomThreshold2 && map.getZoom() < zoomThreshold3){
 ctLegendEl.style.display = 'none';
 zipLegendEl.style.display = 'none';
 bgLegendEl.style.display = 'block';
-blockLegendEl.style.display = 'none';
 blockLegendEl2.style.display = 'none';
 
 } 
-else if (map.getZoom() >= zoomThreshold3 && map.getZoom() < zoomThreshold4){
-ctLegendEl.style.display = 'none';
-zipLegendEl.style.display = 'none';
-bgLegendEl.style.display = 'none';
-blockLegendEl.style.display = 'block';
-blockLegendEl2.style.display = 'none';
 
-} 
-else if (map.getZoom() >= zoomThreshold4 ){
+else if (map.getZoom() >= zoomThreshold3){
 ctLegendEl.style.display = 'none';
 zipLegendEl.style.display = 'none';
 bgLegendEl.style.display = 'none';
-blockLegendEl.style.display = 'none';
 blockLegendEl2.style.display = 'block';
 
 } 
