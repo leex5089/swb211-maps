@@ -2,8 +2,8 @@
 
 - text: Home
   url: /
-- text: Map
+- text: Boundary Map
   url: /map 
-- text: Target Population Map
+- text: Target Density Map
   url: /Target
 
