@@ -2,9 +2,11 @@
 
 - text: Home
   url: /
-- text: Boundary Map
+- text: Boundary_map
   url: /map 
-- text: Target Density Map V1
+- text: N_per_sm_v1
   url: /Target
-- text: Target Density Map V2
+- text: N
   url: /Target_v2
+- text: N_per_sm_v2
+  url: /Target_v3

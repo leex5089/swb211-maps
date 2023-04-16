@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Update a choropleth layer by zoom level</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<style>
+.legend {
+background-color: #fff;
+border-radius: 3px;
+bottom: 30px;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+padding: 10px;
+position: absolute;
+right: 10px;
+z-index: 1;
+}
+ 
+.legend h4 {
+margin: 0 0 10px;
+}
+ 
+.legend div span {
+border-radius: 50%;
+display: inline-block;
+height: 10px;
+margin-right: 5px;
+width: 10px;
+}
+ 
+</style>
+ 
+<div id="map"></div>
+  
+
+ 
+ <div id="b-legend2" class="legend">
+<h4>GreatJobsKC 6 Counties: Block Boundary</h4>
+<h4>Target Pop adj / per sq mile</h4>
+<h4>Source: Census 2020/ACS 2021</h4>
+
+<div><span style="background-color: #808080"></span>0</div>
+<div><span style="background-color: #0c06ac"></span>0-50</div>
+<div><span style="background-color: #7339bd"></span>50-100</div>
+<div><span style="background-color: #ab6cd0"></span>100-200</div>
+<div><span style="background-color: #d9a1e6"></span>200-500</div>
+<div><span style="background-color: #ffafdd"></span>500-1000</div>
+<div><span style="background-color: #f14d5a"></span>1000-2000</div>
+<div><span style="background-color: #de2323"></span>2000-</div> 
+
+</div>
+<script>
+ mapboxgl.accessToken = 'pk.eyJ1Ijoid29ubGVlIiwiYSI6ImNqYjY0bHZlczBvMnAzMm16OTlyYWFzYnYifQ.yaLx92dXVMk1NKp5Fp7HUg';
+const map = new mapboxgl.Map({
+container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/mapbox/light-v11',
+center: [-94.581124,39.115775],
+minZoom: 10,
+zoom: 9
+});  
+const zoomThreshold = 3;
+const zoomThreshold2 = 9;
+const zoomThreshold3 = 10;
+const zoomThreshold4 = 15;
+
+map.on('load', () => {
+// Add a custom vector tileset source. The tileset used in
+// this example contains a feature for every state and
+// county in the U.S.
+// Each state contains four properties. For example:
+//     {
+//         isState: true,
+//         name: "Wyoming",
+//         population: 584153,
+//         state: 56
+//     }
+// Each county contains four properties. For example:
+//     {
+//         county: 16049,
+//         isCounty: true,
+//         name: "Idaho County",
+//         population: 16315
+//     }
+map.addSource('b_target_04152023b-ctbfew', {
+'type': 'vector',
+'url': 'mapbox://wonlee.7g3f7fr2'
+}); 
+ 
+
+ 
+ 
+ 
+
+map.addLayer(
+{
+'id': 'b_target_04152023b-ctbfew',
+'source': 'b_target_04152023b-ctbfew',
+'source-layer': 'b_target_04152023b-ctbfew',
+'minzoom': 10, 
+
+'type': 'fill',
+// only include features for which the "isCounty"
+// property is "true" 
+'paint': {
+'fill-outline-color': 'black',
+
+'fill-color': [
+'interpolate',
+['linear'],
+['get', 'target_p_1'],
+0,
+'#808080',
+50,
+'#0c06ac',
+100,
+'#7339bd',
+200,
+'#ab6cd0',
+500,
+'#d9a1e6',
+1000,
+'#ffafdd',
+2000,
+'#f14d5a',
+3000,
+'#de2323'  
+],
+'fill-opacity': 0.6
+}
+},
+'road-label-simple' // Add layer below labels
+);
+
+
+});
+
+ 
+</script>
+ 
+</body>
+</html>
