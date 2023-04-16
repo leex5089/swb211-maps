@@ -49,14 +49,28 @@ width: 10px;
 <h4>Source: Census 2020/ACS 2021</h4>
 
 <div><span style="background-color: #808080"></span>0</div>
-<div><span style="background-color: #0c06ac"></span>0-50</div>
-<div><span style="background-color: #7339bd"></span>50-100</div>
-<div><span style="background-color: #ab6cd0"></span>100-200</div>
-<div><span style="background-color: #d9a1e6"></span>200-500</div>
-<div><span style="background-color: #ffafdd"></span>500-1000</div>
-<div><span style="background-color: #f14d5a"></span>1000-2000</div>
-<div><span style="background-color: #de2323"></span>2000-</div> 
- 
+<div><span style="background-color: #0c06ac"></span>0-20</div>
+<div><span style="background-color: #7339bd"></span>20-50</div>
+<div><span style="background-color: #ab6cd0"></span>50-100</div>
+<div><span style="background-color: #d9a1e6"></span>100-150</div>
+<div><span style="background-color: #ffafdd"></span>300-500</div>
+<div><span style="background-color: #f14d5a"></span>500-700</div>
+<div><span style="background-color: #de2323"></span>700-</div> 
+ 0,
+'#808080',
+20,
+'#0c06ac',
+50,
+'#7339bd',
+100,
+'#ab6cd0',
+150,
+'#d9a1e6',
+300,
+'#ffafdd',
+500,
+'#f14d5a',
+700,
 </div>
 <script>
  mapboxgl.accessToken = 'pk.eyJ1Ijoid29ubGVlIiwiYSI6ImNqYjY0bHZlczBvMnAzMm16OTlyYWFzYnYifQ.yaLx92dXVMk1NKp5Fp7HUg';
@@ -126,13 +140,13 @@ map.addLayer(
 '#7339bd',
 100,
 '#ab6cd0',
-200,
+150,
 '#d9a1e6',
-500,
+300,
 '#ffafdd',
-750,
+500,
 '#f14d5a',
-1000,
+700,
 '#de2323'  
 ],
 'fill-opacity': 0.6
