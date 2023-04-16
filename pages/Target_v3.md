@@ -1,6 +1,6 @@
 ---
 layout: Target_v3
-title: N_per_sq_mile
+title: Target_v3
 permalink: /Target_v3
 section: Target_v3
 intro_paragraph: >
