@@ -3,10 +3,8 @@
 - text: Home
   url: /
 - text: Boundary_map
-  url: /map 
-- text: N_per_sm_v1
-  url: /Target
+  url: /map  
 - text: N
   url: /Target_v2
-- text: N_per_sm_v2
+- text: N_per_sq_mile
   url: /Target_v3
