@@ -4,6 +4,7 @@
   url: /
 - text: Boundary Map
   url: /map 
-- text: Target Density Map
+- text: Target Density Map V1
   url: /Target
-
+- text: Target Density Map V2
+  url: /Target_v2
