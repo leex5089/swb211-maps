@@ -4,9 +4,9 @@
   url: /
 - text: Boundary_map
   url: /map  
-- text: N
+- text: Count
   url: /Target_v2
-- text: N_per_sq_mile
+- text: Count_per_sq_mile
   url: /Target_v3
 - text: Hot_Spot
   url: /Target_v4
