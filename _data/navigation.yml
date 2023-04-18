@@ -8,3 +8,5 @@
   url: /Target_v2
 - text: Count_per_sq_mile
   url: /Target_v3
+- text: Hot_Spot
+  url: /Target_v4
