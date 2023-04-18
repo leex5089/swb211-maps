@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Update a choropleth layer by zoom level</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<style>
+.legend {
+background-color: #fff;
+border-radius: 3px;
+bottom: 30px;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+padding: 10px;
+position: absolute;
+right: 10px;
+z-index: 1;
+}
+ 
+.legend h4 {
+margin: 0 0 10px;
+}
+ 
+.legend div span {
+border-radius: 50%;
+display: inline-block;
+height: 10px;
+margin-right: 5px;
+width: 10px;
+}
+ 
+</style>
+ 
+<div id="map"></div>
+  
+
+ 
+ <div id="b-legend2" class="legend">
+<h4>GreatJobsKC 6 Counties: Block Boundary</h4>
+<h4>Hot Spot Analysis</h4>
+<h4>Source: Census 2020/ACS 2021</h4>
+
+<div><span style="background-color: #0121E3"></span>Cold Spot -99% confidence</div>
+<div><span style="background-color: #4258E0"></span>Cold Spot -95% confidence</div>
+<div><span style="background-color: #8893D6"></span>Cold Spot -90% confidence</div>
+<div><span style="background-color: #E1D4D4"></span>Not Significant</div>
+<div><span style="background-color: #EDA0A0"></span>Hot Spot -90% confidence</div>
+<div><span style="background-color: #E65959"></span>Hot Spot -95% confidence</div>
+<div><span style="background-color: #FF0000"></span>Hot Spot -99% confidence</div>
+ 
+</div>
+<script>
+ mapboxgl.accessToken = 'pk.eyJ1Ijoid29ubGVlIiwiYSI6ImNqYjY0bHZlczBvMnAzMm16OTlyYWFzYnYifQ.yaLx92dXVMk1NKp5Fp7HUg';
+const map = new mapboxgl.Map({
+container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/mapbox/light-v11',
+center: [-94.581124,39.115775],
+minZoom: 10,
+zoom: 9
+});  
+const zoomThreshold = 3;
+const zoomThreshold2 = 9;
+const zoomThreshold3 = 10;
+const zoomThreshold4 = 15;
+
+map.on('load', () => {
+// Add a custom vector tileset source. The tileset used in
+// this example contains a feature for every state and
+// county in the U.S.
+// Each state contains four properties. For example:
+//     {
+//         isState: true,
+//         name: "Wyoming",
+//         population: 584153,
+//         state: 56
+//     }
+// Each county contains four properties. For example:
+//     {
+//         county: 16049,
+//         isCounty: true,
+//         name: "Idaho County",
+//         population: 16315
+//     }
+map.addSource('b_target_04152023b_OptimizedH-7921cr', {
+'type': 'vector',
+'url': 'mapbox://wonlee.8u6nsaep'
+}); 
+ 
+
+ 
+ 
+ 
+
+map.addLayer(
+{
+'id': 'b_target_04152023b_OptimizedH-7921cr',
+'source': 'b_target_04152023b_OptimizedH-7921cr',
+'source-layer': 'b_target_04152023b_OptimizedH-7921cr',
+'minzoom': 10, 
+
+'type': 'fill',
+// only include features for which the "isCounty"
+// property is "true" 
+'paint': {
+'fill-outline-color': 'black',
+
+'fill-color': [
+'interpolate',
+['linear'],
+['get', 'Gi_Bin'],
+-3,
+'#0121E3',
+-2,
+'#4258E0',
+-1,
+'#8893D6',
+0,
+'#E1D4D4',
+1,
+'#EDA0A0',
+2,
+'#E65959',
+3,
+'#FF0000' 
+],
+'fill-opacity': 0.6
+}
+},
+'road-label-simple' // Add layer below labels
+);
+
+
+});
+
+ 
+</script>
+ 
+</body>
+</html>
