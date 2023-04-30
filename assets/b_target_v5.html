@@ -124,8 +124,15 @@ map.addLayer(
 'circle-color': 'green',
 'circle-opacity': 0.7,
 
-'circle-stroke-color': 'black'
-
+'circle-stroke-color': 'black',
+// Make circles larger as the user zooms from z12 to z22.
+'circle-radius': {
+'base': 1.75,
+'stops': [
+[6, 2],
+[22, 180]
+]
+},
 }
 },
 'road-label-simple' // Add layer below labels
