@@ -2,13 +2,13 @@
 
 - text: Home
   url: /
-- text: Boundary_map
+- text: Boundaries
   url: /map  
-- text: Count
+- text: N
   url: /Target_v2
-- text: Count_per_sq_mile
+- text: Density
   url: /Target_v3
-- text: Hot_Spot
+- text: Hot-spot
   url: /Target_v4
-- text: Point_Map
+- text: Point
   url: /Target_v5
