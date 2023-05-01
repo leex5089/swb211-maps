@@ -4,11 +4,11 @@
   url: /
 - text: Boundaries
   url: /map  
-- text: N
+- text: Count
   url: /Target_v2
 - text: Density
   url: /Target_v3
-- text: Hot-spot
+- text: Hotspot
   url: /Target_v4
 - text: Point
   url: /Target_v5
